@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Account Banned — Human Benchmark</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+        .glow { text-shadow: 0 6px 24px rgba(0,0,0,0.35); }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 min-h-screen flex items-center justify-center">
+<main class="max-w-3xl w-full p-6">
+    <div class="bg-white dark:bg-slate-900/70 backdrop-blur-md rounded-3xl shadow-lg p-8 border border-slate-100 dark:border-slate-800">
+        <div class="flex items-center gap-4">
+            <div class="rounded-full bg-red-50 dark:bg-red-900/30 p-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-red-600 dark:text-red-300" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11V5a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0V9h2a1 1 0 100-2h-2z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Account Suspended</h1>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Violation: Attempted manipulation of benchmark results</p>
+            </div>
+        </div>
+
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl">
+                <h2 class="text-sm text-slate-600 dark:text-slate-300">Account</h2>
+                <div id="account" class="mt-2 font-medium text-slate-900 dark:text-slate-100">Guest-XXXXX</div>
+            </div>
+
+            <div class="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl">
+                <h2 class="text-sm text-slate-600 dark:text-slate-300">Date & ID</h2>
+                <div id="date" class="mt-2 font-medium text-slate-900 dark:text-slate-100">—</div>
+            </div>
+        </div>
+
+        <section class="mt-6">
+            <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-100">Why this happened</h3>
+            <p class="text-slate-600 dark:text-slate-300 mt-2">Our systems detected behaviour that strongly indicates the use of automation, external tools, or other manipulations to alter benchmark results. To protect fair competition and the integrity of scores, this account has been suspended.</p>
+
+            <div class="mt-4 p-4 bg-rose-50 dark:bg-rose-900/20 rounded-lg border border-rose-100 dark:border-rose-800">
+                <strong class="text-rose-700 dark:text-rose-200">Evidence snapshot:</strong>
+                <ul class="mt-2 text-sm text-slate-700 dark:text-slate-300 list-disc pl-5">
+                    <li>Unusually consistent frame-perfect input patterns</li>
+                    <li>Impossibly low reaction times across multiple sessions</li>
+                    <li>Multiple attempts from same IP with conflicting telemetry</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="mt-6">
+            <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-100">Appeal</h3>
+            <p class="text-slate-600 dark:text-slate-300 mt-2">If you believe this was a mistake, you can appeal. Provide your account ID and a clear explanation. Appeals are reviewed manually and typically take 1–3 business days.</p>
+
+            <div class="mt-4 flex flex-col sm:flex-row gap-3">
+                <a id="appealLink" class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-slate-900 text-white hover:opacity-95" href="mailto:appeals@humanbenchmark.example?subject=Appeal%20–%20Account%20Suspension" role="button">Email Appeals</a>
+                <button id="logout" class="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-800 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100">Log out</button>
+            </div>
+        </section>
+
+        <footer class="mt-6 text-xs text-slate-500 dark:text-slate-400">
+            <p>This action is taken to maintain a level playing field for all participants. Repeated or severe abuse may result in a permanent ban.</p>
+        </footer>
+    </div>
+</main>
+
+<script>
+    // small script to personalize the page using query params (e.g. ?user=someone&id=12345)
+    const params = new URLSearchParams(location.search);
+    const user = params.get('user') || localStorage.getItem('hb_name') || 'Guest-XXXXX';
+    const id = params.get('id') || Math.random().toString(36).slice(2,8).toUpperCase();
+    document.getElementById('account').textContent = user;
+    document.getElementById('date').textContent = new Date().toLocaleString() + ' • ID: ' + id;
+
+    document.getElementById('logout').addEventListener('click', ()=>{
+        localStorage.removeItem('hb_name');
+        location.href = '/';
+    });
+</script>
+</body>
+</html>
