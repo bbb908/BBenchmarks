@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BBenchmark</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    boxShadow: {
+                        soft: '0 10px 30px rgba(0,0,0,0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        html, body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+        .glass { background: rgba(255,255,255,0.75); backdrop-filter: blur(10px); }
+        .scrollbar-hide::-webkit-scrollbar{ display:none; }
+        .scrollbar-hide{ -ms-overflow-style:none; scrollbar-width:none; }
+        .mono { font-variant-ligatures: none; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
+<div id="app" class="max-w-6xl mx-auto p-4 sm:p-6">
+
+    <!-- Header -->
+    <header class="mb-6">
+        <div class="flex flex-col sm:flex-row sm:items-end gap-4">
+            <div class="flex-1">
+                <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-slate-800">BBenchmark</h1>
+                <p class="text-slate-600">Try your best.</p>
+            </div>
+            <div class="glass shadow-soft rounded-2xl p-4 flex items-center gap-4">
+                <div class="text-center">
+                    <div class="text-xs uppercase text-slate-500">Signed in as</div>
+                    <div class="font-semibold" v-text="profile.name"></div>
+                </div>
+                <button class="px-3 py-2 rounded-xl bg-slate-900 text-white text-sm hover:opacity-90" @click="resetAll()">Reset Scores</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Tabs -->
+    <nav class="sticky top-2 z-10 mb-6">
+        <div class="glass shadow-soft rounded-2xl p-2 flex flex-wrap gap-2">
+            <button v-for="t in tabs" :key="t.id"
+                    class="px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm"
+                    :class="current===t.id ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 hover:bg-slate-100'"
+                    @click="switchTab(t.id)">
+                {{ t.label }}
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        <!-- Left: The test card -->
+        <div class="lg:col-span-2 glass shadow-soft rounded-3xl p-5">
+            <component :is="currentComponent" :profile="profile" @update-best="updateBest" />
+        </div>
+
+        <!-- Right: Scoreboard -->
+        <aside class="glass shadow-soft rounded-3xl p-5 space-y-4">
+            <h2 class="text-xl font-semibold text-slate-800">Scoreboard</h2>
+            <div class="text-sm text-slate-600">Best scores on this device.</div>
+            <div class="grid grid-cols-1 gap-3">
+                <div v-for="t in tabs" :key="'best-'+t.id" class="bg-white rounded-2xl p-4 flex items-center justify-between">
+                    <div>
+                        <div class="text-sm font-semibold text-slate-800">{{ t.label }}</div>
+                        <div class="text-xs text-slate-500">{{ t.desc }}</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-base font-semibold text-slate-900">{{ prettyBest(t.id) }}</div>
+                        <div class="text-[11px] text-slate-500" v-if="bests[t.id] && bests[t.id].date">{{ new Date(bests[t.id].date).toLocaleDateString() }}</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </section>
+
+    <footer class="text-center text-xs text-slate-500 mt-8">
+        Nice benchmarks you got there.
+    </footer>
+</div>
+
+<!-- Vue 3 -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="src/main.js"></script>
+</body>
+</html>
